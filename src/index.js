@@ -93,7 +93,7 @@ function createArtElement(metadata) {
 }
 
 async function getArtMetadata() {
-  const res = await fetch('/programmatic-art/res/metadata.yml',
+  const res = await fetch('/res/metadata.yml',
     { headers: {
         'Content-Type': 'application/yaml'
       }})
@@ -122,7 +122,7 @@ async function mainPageLoad() {
   const artMetadata = await getArtMetadata()
   await loadArt(artMetadata)
 
-  document.getElementById('about-link').onclick = () => onNavLinkClick('/programmatic-art/#/about')
+  document.getElementById('about-link').onclick = () => onNavLinkClick('/#/about')
 }
 
 async function aboutPageLoad() {
@@ -131,5 +131,5 @@ async function aboutPageLoad() {
     ele.innerHTML = new Date().getFullYear()
   }
 
-  document.getElementById('gallery-link').onclick = () => onNavLinkClick('/programmatic-art')
+  document.getElementById('gallery-link').onclick = () => onNavLinkClick('/')
 }
