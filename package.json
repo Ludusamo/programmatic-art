@@ -1,0 +1,23 @@
+{
+  "name": "programmatic-art",
+  "version": "1.0.0",
+  "description": "Repo for programmatic art project.",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ludusamo/programmatic-art.git"
+  },
+  "keywords": [
+    "art",
+    "programming"
+  ],
+  "author": "Brendan Horng",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Ludusamo/programmatic-art/issues"
+  },
+  "homepage": "https://github.com/Ludusamo/programmatic-art#readme"
+}
