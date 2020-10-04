@@ -5,6 +5,10 @@ Content {
   font-family: 'Montserrat', sans-serif;
 }
 
+p {
+  font-size: 1.5rem;
+}
+
 h1,h2,h3,h4 {
   font-family: 'Roboto', sans-serif;
 }
@@ -37,7 +41,7 @@ Header {
 }
 
 HeaderTitle {
-  font-size: 2rem;
+  font-size: 3rem;
   margin-right: auto;
   font-family: 'Roboto', sans-serif;
 }
