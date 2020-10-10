@@ -3,4 +3,7 @@ art:
   one-circle:
     title: "one circle"
     date: 2020-09-26
+  two-circle:
+    title: "two circle"
+    date: 2020-10-10
 ...
