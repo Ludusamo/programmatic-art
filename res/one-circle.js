@@ -1,9 +1,9 @@
 export const art = p => {
-  const WIDTH = 500
-  const HEIGHT = 500
+  const WIDTH = 300
+  const HEIGHT = 300
 
-  const MIN_DIAMETER = 33
-  const MAX_DIAMETER = 133
+  const MIN_DIAMETER = 15
+  const MAX_DIAMETER = 100
 
   const SATURATION = 75
   const VALUE = 66

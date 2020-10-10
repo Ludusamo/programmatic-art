@@ -103,7 +103,7 @@ async function getArtMetadata() {
 
 async function loadArt(artMetadata) {
   let artCollection = document.getElementsByTagName('ArtCollection')[0]
-  console.log(artMetadata)
+  artCollection.innerHTML = ''
   for (const name in artMetadata) {
     const metadata = artMetadata[name]
     const artEle = createArtElement(metadata)
