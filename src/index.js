@@ -83,6 +83,15 @@ window.addEventListener('load', router)
 
 // Scripting
 
+function artByDateDesc(artMetadata) {
+  let arr = []
+  for (let name in artMetadata) {
+    arr.push([name, artMetadata[name].date])
+  }
+  arr.sort((a, b) => b[1] - a[1])
+  return arr.map(x => x[0])
+}
+
 function createArtElement(metadata) {
   const art = document.createElement('Art')
   const span = document.createElement('span')
@@ -104,7 +113,7 @@ async function getArtMetadata() {
 async function loadArt(artMetadata) {
   let artCollection = document.getElementsByTagName('ArtCollection')[0]
   artCollection.innerHTML = ''
-  for (const name in artMetadata) {
+  for (const name of artByDateDesc(artMetadata)) {
     const metadata = artMetadata[name]
     const artEle = createArtElement(metadata)
     artCollection.appendChild(artEle)
