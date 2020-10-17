@@ -6,4 +6,7 @@ art:
   two-circle:
     title: "two circle"
     date: 2020-10-10
+  expanding-squares:
+    title: "expanding squares"
+    date: 2020-10-17
 ...
