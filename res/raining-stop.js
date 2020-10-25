@@ -149,24 +149,31 @@ const drawSign = (p, x, y, w, h) => {
 
 const drawUmbrella = (p, x, y, w) => {
   const NUM_POINTS = 10
-  p.strokeWeight(w / 20)
-  p.stroke(0)
+  const CENTER_X = x + w / 5
+  const CENTER_Y = y - w / 7
   let points = []
   for (let i = 0; i < NUM_POINTS; i++) {
     let px = x + w * p.cos(p.TWO_PI * i / NUM_POINTS)
     let py = y + w * p.sin(p.TWO_PI * i / NUM_POINTS)
     points.push([px, py])
   }
+
+  p.strokeWeight(w / 10)
+  p.stroke('brown')
+  p.noFill()
+  p.line(CENTER_X, CENTER_Y, x - w * 1.5, y + w)
+  p.noStroke()
+
   for (let i = 0; i < NUM_POINTS; i++) {
     if (i % 2 == 0) {
       p.fill('red')
     } else {
-      p.fill(200)
+      p.fill(225)
     }
 
     let p1 = points[i]
     let p2 = points[(i + 1) % NUM_POINTS]
-    p.triangle(x, y, p1[0], p1[1], p2[0], p2[1])
+    p.triangle(CENTER_X, CENTER_Y, p1[0], p1[1], p2[0], p2[1])
   }
 }
 
