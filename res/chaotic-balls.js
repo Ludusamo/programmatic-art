@@ -63,7 +63,6 @@ export const art = p => {
     p.fill(40)
     let reset = allCloseToStarting(balls) && p.millis() - lastReset > resetDebounce
     if (reset) {
-      console.log('resetting')
       lastReset = p.millis()
     }
     for (let ball of balls) {
