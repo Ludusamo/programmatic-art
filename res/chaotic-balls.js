@@ -50,7 +50,7 @@ export const art = p => {
 
   function allCloseToStarting(balls) {
     for (let ball of balls) {
-      if (p.abs(ball.x - ball.startingX) > 10 || p.abs(ball.y - ball.startingY) > 10) return false
+      if (p.abs(ball.x - ball.startingX) > WIDTH / 30 || p.abs(ball.y - ball.startingY) > WIDTH / 30) return false
     }
     return true
   }
