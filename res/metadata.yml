@@ -3,28 +3,48 @@ art:
   one-circle:
     title: "one circle"
     date: 2020-09-26
+    tags:
+      - looping
   two-circle:
     title: "two circle"
     date: 2020-10-10
+    tags:
+      - looping
   expanding-squares:
     title: "expanding squares"
     date: 2020-10-17
+    tags:
+      - looping
   raining-stop:
     title: "raining stop"
     date: 2020-10-24
+    tags: []
   negative-circle:
     title: "negative circle"
     date: 2020-10-31
+    tags:
+      - looping
   kaleidoscope:
     title: "kaleidoscope"
     date: 2020-11-07
+    tags:
+      - looping
   firefly-post:
     title: "firefly post"
     date: 2020-11-14
+    tags: []
   chaotic-balls:
     title: "chaotic balls"
     date: 2020-11-22
+    tags:
+      - looping
   circle-fire:
     title: "circle fire"
     date: 2020-11-28
+    tags:
+      - particles
+  constellation:
+    title: "constellation"
+    date: 2020-12-06
+    tags: []
 ...
