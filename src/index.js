@@ -46,6 +46,8 @@ let aboutPage = `
 `
 // Routing
 
+let currentPageContext = null
+
 let routes =
   { '/': { content: mainPage, load: mainPageLoad }
   , '/about': {content: aboutPage, load: aboutPageLoad }
@@ -69,7 +71,8 @@ const router = async () => {
   let parsedURL = (request.resource ? '/' + request.resource : '/')
                 + (request.id ? '/:id' : '')
   content.innerHTML = routes[parsedURL].content
-  await routes[parsedURL].load(request.id)
+  if (currentPageContext) currentPageContext.unload()
+  currentPageContext = await routes[parsedURL].load(request.id)
 }
 
 const onNavLinkClick = (pathName, state={}) => {
@@ -77,7 +80,7 @@ const onNavLinkClick = (pathName, state={}) => {
   router()
 }
 
-window.onpopstate = router
+// window.onpopstate = router
 window.addEventListener('hashchange', router)
 window.addEventListener('load', router)
 
@@ -95,7 +98,6 @@ function artByDateDesc(artMetadata) {
 function createArtElement(metadata) {
   const art = document.createElement('Art')
   const span = document.createElement('span')
-  console.log(metadata)
   span.innerHTML = metadata.title
   art.appendChild(span)
   return art
@@ -113,14 +115,16 @@ async function getArtMetadata() {
 async function loadArt(artMetadata) {
   let artCollection = document.getElementsByTagName('ArtCollection')[0]
   artCollection.innerHTML = ''
+  let art = []
   for (const name of artByDateDesc(artMetadata)) {
     const metadata = artMetadata[name]
     const artEle = createArtElement(metadata)
     artCollection.appendChild(artEle)
 
     const module = await import('../res/' + name + '.js')
-    new p5(module.art, artEle)
+    art.push(new p5(module.art, artEle))
   }
+  return art
 }
 
 async function mainPageLoad() {
@@ -129,9 +133,19 @@ async function mainPageLoad() {
     ele.innerHTML = new Date().getFullYear()
   }
   const artMetadata = await getArtMetadata()
-  await loadArt(artMetadata)
+  let art = await loadArt(artMetadata)
+  currentPageContext =
+    { art: art
+    , unload:
+      () => {
+        for (let a of art) {
+          a.remove()
+        }
+      }
+    }
 
   document.getElementById('about-link').onclick = () => onNavLinkClick('/#/about')
+  return currentPageContext
 }
 
 async function aboutPageLoad() {
@@ -141,4 +155,5 @@ async function aboutPageLoad() {
   }
 
   document.getElementById('gallery-link').onclick = () => onNavLinkClick('/')
+  return null
 }
