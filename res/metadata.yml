@@ -52,4 +52,8 @@ art:
     date: 2020-12-12
     tags:
       - looping
+  bouncing-city:
+    title: "bouncing city"
+    date: 2020-12-20
+    tags: []
 ...
