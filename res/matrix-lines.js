@@ -29,7 +29,6 @@ export const art = p => {
   }
 
   Path.prototype.run = function() {
-    console.log(this.data.length)
     this.update()
     this.draw()
     for (let i = this.data.length - 1; i >= 0; i--) {
