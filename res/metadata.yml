@@ -60,4 +60,9 @@ art:
     title: "matrix lines"
     date: 2020-12-26
     tags: []
+  circle-ring:
+    title: "circle ring"
+    date: 2021-01-02
+    tags:
+      - looping
 ...
