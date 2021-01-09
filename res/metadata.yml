@@ -24,6 +24,7 @@ art:
     date: 2020-10-31
     tags:
       - looping
+      - grayscale
   kaleidoscope:
     title: "kaleidoscope"
     date: 2020-11-07
@@ -38,6 +39,7 @@ art:
     date: 2020-11-22
     tags:
       - looping
+      - grayscale
   circle-fire:
     title: "circle fire"
     date: 2020-11-28
@@ -52,6 +54,7 @@ art:
     date: 2020-12-12
     tags:
       - looping
+      - grayscale
   bouncing-city:
     title: "bouncing city"
     date: 2020-12-20
@@ -65,4 +68,11 @@ art:
     date: 2021-01-02
     tags:
       - looping
+      - grayscale
+  marching-boxes:
+    title: "marching boxes"
+    date: 2021-01-09
+    tags:
+      - looping
+      - grayscale
 ...
