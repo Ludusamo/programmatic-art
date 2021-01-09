@@ -54,8 +54,8 @@ export const art = p => {
 
   p.colorMode(p.HSB)
 
-  const WIDTH = 1000
-  const HEIGHT = 1000
+  const WIDTH = 300
+  const HEIGHT = 300
 
   const SQUARE_SIZE = WIDTH / 8
   let TRIANGLE_COLOR_1 = p.color(40)
