@@ -15,6 +15,9 @@ let mainPage = `
     </Header>
     <hr/>
     <ArtCollection></ArtCollection>
+    <div class="pagination">
+      <a href="#/page/1">&laquo;</a>
+    </div>
     <hr/>
     <Footer>
       © <Year></Year> Brendan Horng • License <a href="https://github.com/Ludusamo/blog/blob/master/LICENSE">MIT</a>
@@ -51,6 +54,7 @@ let currentPageContext = null
 let routes =
   { '/': { content: mainPage, load: mainPageLoad }
   , '/about': {content: aboutPage, load: aboutPageLoad }
+  , '/page/:id': { content: mainPage, load: mainPageLoad }
   }
 
 let parseRequestURL = () => {
@@ -86,6 +90,9 @@ window.addEventListener('load', router)
 
 // Scripting
 
+const NUM_ART_PER_PAGE = 12
+const ART_SIZE = 400
+
 function artByDateDesc(artMetadata) {
   let arr = []
   for (let name in artMetadata) {
@@ -107,33 +114,59 @@ async function getArtMetadata() {
   const res = await fetch('/res/metadata.yml',
     { headers: {
         'Content-Type': 'application/yaml'
-      }})
+    }})
   const yamlContent = await res.text()
   return jsyaml.safeLoad(yamlContent).art
 }
 
-async function loadArt(artMetadata) {
+async function loadArt(artMetadata, page) {
   let artCollection = document.getElementsByTagName('ArtCollection')[0]
   artCollection.innerHTML = ''
   let art = []
-  for (const name of artByDateDesc(artMetadata)) {
+  //for (const name of artByDateDesc(artMetadata)) {
+  const artOffset = NUM_ART_PER_PAGE * (page - 1)
+  const numArt = Object.keys(artMetadata).length
+  for (let i = artOffset; i < Math.min(artOffset + NUM_ART_PER_PAGE, numArt); i++) {
+    const name = artByDateDesc(artMetadata)[i]
     const metadata = artMetadata[name]
     const artEle = createArtElement(metadata)
     artCollection.appendChild(artEle)
 
     const module = await import('../res/' + name + '.js')
-    art.push(new p5(module.art(300, 300), artEle))
+    art.push(new p5(module.art(ART_SIZE, ART_SIZE), artEle))
   }
   return art
 }
 
-async function mainPageLoad() {
+function createPaginationLink(page, active, content) {
+  content = content || page
+  const pageLink = document.createElement('a')
+  if (active) {
+    pageLink.classList.add('active')
+  }
+  pageLink.href = '#/page/' + page
+  pageLink.innerHTML = content
+  return pageLink
+}
+
+function setupPagination(page, numArt) {
+  let pagination = document.getElementsByClassName('pagination')
+  let numPages = Math.ceil(numArt / NUM_ART_PER_PAGE)
+  for (let i = 1; i <= numPages; i++) {
+    pagination[0].append(createPaginationLink(i, page == i))
+  }
+  pagination[0].append(createPaginationLink(numPages, false, '&raquo;'))
+}
+
+async function mainPageLoad(page) {
+  page = page || 1
   const yearElements = document.getElementsByTagName('Year')
   for (let ele of yearElements) {
     ele.innerHTML = new Date().getFullYear()
   }
   const artMetadata = await getArtMetadata()
-  let art = await loadArt(artMetadata)
+  let art = await loadArt(artMetadata, page)
+  setupPagination(page, Object.keys(artMetadata).length)
   currentPageContext =
     { art: art
     , unload:

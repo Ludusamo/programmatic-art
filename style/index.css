@@ -196,3 +196,26 @@ Art:hover > span {
     font-size: 18px;
   }
 }
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  font-size: 1.5em;
+}
+
+.pagination a {
+  color: black;
+  padding: 1em 2em;
+  text-decoration: none;
+}
+
+.pagination a.active {
+  background-color: #3FC3BF;
+  color: white;
+  border-radius: 1em;
+}
+
+.pagination a:hover:not(.active) {
+  background-color: #FF7F2E;
+  border-radius: 1em;
+}
