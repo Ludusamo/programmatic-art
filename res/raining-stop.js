@@ -55,7 +55,7 @@ const drawCloud = (p, x, y, w) => {
   p.circle(x + WIDTH / 5, y + WIDTH / 30, WIDTH / 3)
 }
 
-const createRainDrop = (p, startX, startY, w, h) => {
+const createRainDrop = (p, startX, startY, w, h, heightScale) => {
   const WIDTH = w
   const MAX_LENGTH = h
 
@@ -91,7 +91,7 @@ const createRainDrop = (p, startX, startY, w, h) => {
     p.fill(75)
     p.noStroke()
     if (state == 'FALLING') {
-      let height = p.constrain((p.millis() - stateStartTime) / 40, 0, MAX_LENGTH)
+      let height = p.constrain((p.millis() - stateStartTime) / 60 * heightScale, 0, MAX_LENGTH)
       p.rect(x - WIDTH / 2, y - MAX_LENGTH, WIDTH, height)
       y += velocity * (p.millis() - lastTime) / TIME_SCALE
     } else if (state == 'SPLASHING') {
@@ -106,10 +106,14 @@ const createRainDrop = (p, startX, startY, w, h) => {
   const getState = () => state
   const getX = () => x
   const getY = () => y
+  const setX = newX => x = newX
+  const setY = newY => y = newY
 
   return {
     getX: getX,
     getY: getY,
+    setX: setX,
+    setY: setY,
     draw: draw,
     getState: getState,
     setState: setState
@@ -177,62 +181,64 @@ const drawUmbrella = (p, x, y, w) => {
   }
 }
 
-export const art = p => {
-  p.randomSeed(17)
-  const WIDTH = 300
-  const HEIGHT = 300
+export const art = (WIDTH, HEIGHT) => {
+  return function(p) {
+    p.randomSeed(17)
 
-  const GROUNDX = WIDTH / 10
-  const GROUNDY = HEIGHT - HEIGHT / 6
-  const CLOUDY = HEIGHT / 5
-  const NUM_CLOUDS = 4
-  const RAIN_INTERVAL = 50
+    const GROUNDX = WIDTH / 10
+    const GROUNDY = HEIGHT - HEIGHT / 6
+    const CLOUDY = HEIGHT / 5
+    const NUM_CLOUDS = 4
+    const RAIN_INTERVAL = 50
 
-  let last_rain = p.millis()
+    let last_rain = p.millis()
 
-  let station = createStation(p, WIDTH / 2, HEIGHT / 3, WIDTH / 30)
-  let raindrops = []
+    let station = createStation(p, WIDTH / 2, HEIGHT / 3, WIDTH / 30)
+    let raindrops = []
 
-  p.setup = () => {
-    p.createCanvas(WIDTH, HEIGHT);
-  }
-
-  p.draw = () => {
-    p.background(235)
-    p.noStroke()
-    if (p.millis() - last_rain > RAIN_INTERVAL) {
-      raindrops.push(createRainDrop(p, p.random(GROUNDX, GROUNDX * 9), CLOUDY, WIDTH / 150, HEIGHT / 15))
-      last_rain = p.millis()
+    p.setup = () => {
+      p.createCanvas(WIDTH, HEIGHT);
     }
 
-    for (let raindrop of raindrops) {
-      raindrop.draw()
-      if (raindrop.getState() == 'FALLING') {
-        // Bounds for ground detection
-        if (((raindrop.getX() > GROUNDX && raindrop.getX() < WIDTH / 4)
-              || (raindrop.getX() > WIDTH / 4 * 3 && raindrop.getX() < GROUNDX * 9))
-            && raindrop.getY() >= GROUNDY) {
-          raindrop.setState('SPLASHING')
-        }
-        // Bounds for roof detection
-        if (raindrop.getX() > WIDTH / 4 && raindrop.getX() < WIDTH * 3 / 4 && raindrop.getY() >= GROUNDY - HEIGHT / 3) {
-          raindrop.setState('SPLASHING')
+    p.draw = () => {
+      p.background(235)
+      p.noStroke()
+      if (p.millis() - last_rain > RAIN_INTERVAL) {
+        raindrops.push(createRainDrop(p, p.random(GROUNDX, GROUNDX * 9), CLOUDY, WIDTH / 150, HEIGHT / 15, HEIGHT / 300))
+        last_rain = p.millis()
+      }
+
+      for (let raindrop of raindrops) {
+        raindrop.draw()
+        if (raindrop.getState() == 'FALLING') {
+          // Bounds for ground detection
+          if (((raindrop.getX() > GROUNDX && raindrop.getX() < WIDTH / 4)
+                || (raindrop.getX() > WIDTH / 4 * 3 && raindrop.getX() < GROUNDX * 9))
+              && raindrop.getY() >= GROUNDY) {
+            raindrop.setY(GROUNDY)
+            raindrop.setState('SPLASHING')
+          }
+          // Bounds for roof detection
+          if (raindrop.getX() > WIDTH / 4 && raindrop.getX() < WIDTH * 3 / 4 && raindrop.getY() >= GROUNDY - HEIGHT / 3) {
+            raindrop.setY(GROUNDY - HEIGHT / 3)
+            raindrop.setState('SPLASHING')
+          }
         }
       }
+      raindrops = raindrops.filter(r => r.getState() != 'DEAD')
+
+      station.draw(WIDTH / 2, GROUNDY)
+
+      for (let i = 0; i < NUM_CLOUDS; i++) {
+        drawCloud(p, (i + 1) * WIDTH / (NUM_CLOUDS + 1), CLOUDY, WIDTH / 3)
+      }
+
+      drawSign(p, GROUNDX * 8, GROUNDY, WIDTH / 10, HEIGHT / 4)
+      drawUmbrella(p, GROUNDX * 3, GROUNDY - HEIGHT / 20, HEIGHT / 20)
+
+      // Draw Ground
+      p.fill(100)
+      p.rect(WIDTH / 10, GROUNDY, WIDTH / 10 * 8, HEIGHT / 100)
     }
-    raindrops = raindrops.filter(r => r.getState() != 'DEAD')
-
-    station.draw(WIDTH / 2, GROUNDY)
-
-    for (let i = 0; i < NUM_CLOUDS; i++) {
-      drawCloud(p, (i + 1) * WIDTH / (NUM_CLOUDS + 1), CLOUDY, WIDTH / 3)
-    }
-
-    drawSign(p, GROUNDX * 8, GROUNDY, WIDTH / 10, HEIGHT / 4)
-    drawUmbrella(p, GROUNDX * 3, GROUNDY - HEIGHT / 20, HEIGHT / 20)
-
-    // Draw Ground
-    p.fill(100)
-    p.rect(WIDTH / 10, GROUNDY, WIDTH / 10 * 8, HEIGHT / 100)
   }
 }

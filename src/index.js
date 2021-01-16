@@ -122,7 +122,7 @@ async function loadArt(artMetadata) {
     artCollection.appendChild(artEle)
 
     const module = await import('../res/' + name + '.js')
-    art.push(new p5(module.art, artEle))
+    art.push(new p5(module.art(300, 300), artEle))
   }
   return art
 }

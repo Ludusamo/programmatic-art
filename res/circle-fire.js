@@ -60,49 +60,49 @@ Particle.prototype.isDead = function() {
   return this.lifespan <= 0
 }
 
-export const art = p => {
-  const WIDTH = 300
-  const HEIGHT = 300
-  const CIRCLE_WIDTH = WIDTH / 5
-  p.colorMode(p.HSB)
+export const art = (WIDTH, HEIGHT) => {
+  return function(p) {
+    const CIRCLE_WIDTH = WIDTH / 5
+    p.colorMode(p.HSB)
 
-  let fire = []
+    let fire = []
 
-  let fireParticle = function(color, lightStrength, size) {
-    let emitLight = lightStrength || 0
-    let diameter = size || CIRCLE_WIDTH
-    return function () {
-      return {render: function(pos, lifetime) {
-          p.push()
-          p.noStroke()
-          color.setAlpha(lifetime)
-          p.fill(color)
-          p.circle(pos.x, pos.y, diameter / 2)
-          color.setAlpha(emitLight)
-          p.fill(color)
-          p.circle(pos.x, pos.y, diameter)
-          p.pop()
+    let fireParticle = function(color, lightStrength, size) {
+      let emitLight = lightStrength || 0
+      let diameter = size || CIRCLE_WIDTH
+      return function () {
+        return {render: function(pos, lifetime) {
+            p.push()
+            p.noStroke()
+            color.setAlpha(lifetime)
+            p.fill(color)
+            p.circle(pos.x, pos.y, diameter / 2)
+            color.setAlpha(emitLight)
+            p.fill(color)
+            p.circle(pos.x, pos.y, diameter)
+            p.pop()
+          }
         }
       }
     }
-  }
 
-  p.setup = function() {
-    p.createCanvas(WIDTH, HEIGHT);
-    let firePos = p.createVector(WIDTH / 2 - CIRCLE_WIDTH / 6, HEIGHT / 7 * 4)
-    let firePos2 = p.createVector(WIDTH / 2 + CIRCLE_WIDTH / 6, HEIGHT / 7 * 4)
-    fire.push(new ParticleSystem(fireParticle(p.color(10, 100, 100), 0.01), firePos, WIDTH * 0.3, WIDTH  * 0.5, p, 0.3))
-    fire.push(new ParticleSystem(fireParticle(p.color(10, 100, 100), 0.01), firePos2, WIDTH * 0.3, WIDTH  * 0.5, p, 0.3))
-    fire.push(new ParticleSystem(fireParticle(p.color(30, 100, 100), 0.02), firePos, WIDTH * 0.2, WIDTH * 0.3, p, 0.2))
-    fire.push(new ParticleSystem(fireParticle(p.color(30, 100, 100), 0.02), firePos2, WIDTH * 0.2, WIDTH * 0.3, p, 0.2))
-    fire.push(new ParticleSystem(fireParticle(p.color(50, 100, 100), 0.01, WIDTH / 6), firePos, WIDTH * 0.1, WIDTH * 0.4, p, 0.1, 0.2, 1))
-    fire.push(new ParticleSystem(fireParticle(p.color(50, 100, 100), 0.01, WIDTH / 6), firePos2, WIDTH * 0.1, WIDTH * 0.4, p, 0.1, 0.2, 1))
-  }
+    p.setup = function() {
+      p.createCanvas(WIDTH, HEIGHT);
+      let firePos = p.createVector(WIDTH / 2 - CIRCLE_WIDTH / 6, HEIGHT / 7 * 4)
+      let firePos2 = p.createVector(WIDTH / 2 + CIRCLE_WIDTH / 6, HEIGHT / 7 * 4)
+      fire.push(new ParticleSystem(fireParticle(p.color(10, 100, 100), 0.01), firePos, WIDTH * 0.3, WIDTH  * 0.5, p, 0.3))
+      fire.push(new ParticleSystem(fireParticle(p.color(10, 100, 100), 0.01), firePos2, WIDTH * 0.3, WIDTH  * 0.5, p, 0.3))
+      fire.push(new ParticleSystem(fireParticle(p.color(30, 100, 100), 0.02), firePos, WIDTH * 0.2, WIDTH * 0.3, p, 0.2))
+      fire.push(new ParticleSystem(fireParticle(p.color(30, 100, 100), 0.02), firePos2, WIDTH * 0.2, WIDTH * 0.3, p, 0.2))
+      fire.push(new ParticleSystem(fireParticle(p.color(50, 100, 100), 0.01, WIDTH / 6), firePos, WIDTH * 0.1, WIDTH * 0.4, p, 0.1, 0.2, 1))
+      fire.push(new ParticleSystem(fireParticle(p.color(50, 100, 100), 0.01, WIDTH / 6), firePos2, WIDTH * 0.1, WIDTH * 0.4, p, 0.1, 0.2, 1))
+    }
 
-  p.draw = function() {
-    p.background(10)
-    for (let ps of fire) {
-      ps.run()
+    p.draw = function() {
+      p.background(10)
+      for (let ps of fire) {
+        ps.run()
+      }
     }
   }
 }
