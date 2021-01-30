@@ -182,7 +182,7 @@ ArtInfo > * {
 
 ArtDisplay {
   display: flex;
-  justify-content: center
+  justify-content: center;
 }
 
 EleName {
@@ -207,6 +207,9 @@ EleName {
   ArtDisplay {
     flex-direction: column;
   }
+  Art {
+    margin: 0;
+  }
 }
 
 @media all and (max-width:800px) {
@@ -218,6 +221,9 @@ EleName {
   }
   ArtDisplay {
     flex-direction: column;
+  }
+  ArtDisplay > * {
+    margin: 0;
   }
 }
 
