@@ -238,8 +238,6 @@ function setArtInfo(metadata) {
     , tags: tagsEle
     }
 
-  console.log(info)
-
   for (let infoSlot of artInfo.children) {
     infoSlot.appendChild(info[infoSlot.localName])
   }
@@ -253,7 +251,8 @@ async function loadSingleArt(artMetadata, name) {
   singleArtView.appendChild(artEle)
   setArtInfo(metadata)
   const module = await import('../res/' + name + '.js')
-  let art = [new p5(module.art(SINGLE_ART_SIZE, SINGLE_ART_SIZE), artEle)]
+  let artSize = Math.max(ART_SIZE, Math.min(SINGLE_ART_SIZE, SINGLE_ART_SIZE * window.screen.width / 2560))
+  let art = [new p5(module.art(artSize, artSize), artEle)]
   return art
 }
 
