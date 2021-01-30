@@ -1,4 +1,4 @@
-/*global jsyaml, p5*/
+/*global jsyaml, p5, moment*/
 /*eslint no-undef: "error"*/
 
 // Routes
@@ -47,6 +47,40 @@ let aboutPage = `
     © <Year></Year> Brendan Horng • License <a href="https://github.com/Ludusamo/blog/blob/master/LICENSE">MIT</a>
   </Footer>
 `
+
+let artPage = `
+  <Header>
+      <HeaderTitle>
+        <BrandLeft>programmatic</BrandLeft>.<BrandRight>art</BrandRight>
+      </HeaderTitle>
+      <Links>
+        <NavLink class="link" id="gallery-link">Gallery</NavLink>
+        <NavLink class="link" id="about-link">About</NavLink>
+        <NavLink class="link" onclick="window.location='https://ludusamo.com/blog'">Blog</NavLink>
+      </Links>
+  </Header>
+  <hr/>
+  <p>
+    <ArtDisplay>
+      <SingleArtView></SingleArtView>
+      <ArtInfo>
+        <name>
+          <EleName>Name:</EleName>
+        </name>
+        <date>
+          <EleName>Date:</EleName>
+        </date>
+        <tags>
+          <EleName>Tags:</EleName>
+        </tags>
+      </ArtInfo>
+    </ArtDisplay>
+  </p>
+  <hr/>
+  <Footer>
+    © <Year></Year> Brendan Horng • License <a href="https://github.com/Ludusamo/blog/blob/master/LICENSE">MIT</a>
+  </Footer>
+`
 // Routing
 
 let currentPageContext = null
@@ -55,6 +89,7 @@ let routes =
   { '/': { content: mainPage, load: mainPageLoad }
   , '/about': {content: aboutPage, load: aboutPageLoad }
   , '/page/:id': { content: mainPage, load: mainPageLoad }
+  , '/art/:id': { content: artPage, load: artPageLoad }
   }
 
 let parseRequestURL = () => {
@@ -92,6 +127,7 @@ window.addEventListener('load', router)
 
 const NUM_ART_PER_PAGE = 12
 const ART_SIZE = 400
+const SINGLE_ART_SIZE = ART_SIZE * 2
 
 function artByDateDesc(artMetadata) {
   let arr = []
@@ -119,17 +155,23 @@ async function getArtMetadata() {
   return jsyaml.safeLoad(yamlContent).art
 }
 
+function unloadArt(art) {
+  for (let a of art) {
+    a.remove()
+  }
+}
+
 async function loadArt(artMetadata, page) {
   let artCollection = document.getElementsByTagName('ArtCollection')[0]
   artCollection.innerHTML = ''
   let art = []
-  //for (const name of artByDateDesc(artMetadata)) {
   const artOffset = NUM_ART_PER_PAGE * (page - 1)
   const numArt = Object.keys(artMetadata).length
   for (let i = artOffset; i < Math.min(artOffset + NUM_ART_PER_PAGE, numArt); i++) {
     const name = artByDateDesc(artMetadata)[i]
     const metadata = artMetadata[name]
     const artEle = createArtElement(metadata)
+    artEle.onclick = () => onNavLinkClick('#/art/' + name)
     artCollection.appendChild(artEle)
 
     const module = await import('../res/' + name + '.js')
@@ -169,14 +211,66 @@ async function mainPageLoad(page) {
   setupPagination(page, Object.keys(artMetadata).length)
   currentPageContext =
     { art: art
-    , unload:
-      () => {
-        for (let a of art) {
-          a.remove()
-        }
-      }
+    , unload: () => unloadArt(art)
     }
 
+  document.getElementById('about-link').onclick = () => onNavLinkClick('/#/about')
+  return currentPageContext
+}
+
+function setArtInfo(metadata) {
+  let artInfo = document.getElementsByTagName('ArtInfo')[0]
+  let tagsEle = document.createElement('tags')
+  let createEle = (content) => {
+    let ele = document.createElement('div')
+    ele.innerHTML = content
+    return ele
+  }
+  for (let tag of metadata.tags) {
+    let tagEle = document.createElement('tag')
+    tagEle.classList.add('chip')
+    tagEle.innerHTML = tag
+    tagsEle.appendChild(tagEle)
+  }
+  const info =
+    { name: createEle(metadata['title'])
+    , date: createEle(moment(metadata['date']).format('YYYY-MM-DD'))
+    , tags: tagsEle
+    }
+
+  console.log(info)
+
+  for (let infoSlot of artInfo.children) {
+    infoSlot.appendChild(info[infoSlot.localName])
+  }
+}
+
+async function loadSingleArt(artMetadata, name) {
+  let singleArtView = document.getElementsByTagName('SingleArtView')[0]
+  singleArtView.innerHTML = ''
+  const metadata = artMetadata[name]
+  const artEle = createArtElement(metadata)
+  singleArtView.appendChild(artEle)
+  setArtInfo(metadata)
+  const module = await import('../res/' + name + '.js')
+  let art = [new p5(module.art(SINGLE_ART_SIZE, SINGLE_ART_SIZE), artEle)]
+  return art
+}
+
+async function artPageLoad(name) {
+  const yearElements = document.getElementsByTagName('Year')
+  for (let ele of yearElements) {
+    ele.innerHTML = new Date().getFullYear()
+  }
+  const artMetadata = await getArtMetadata()
+  let art = await loadSingleArt(artMetadata, name)
+  currentPageContext =
+    { art: art
+    , unload:
+      () => unloadArt(art)
+    }
+
+  document.getElementById('gallery-link').onclick = () => onNavLinkClick('/')
   document.getElementById('about-link').onclick = () => onNavLinkClick('/#/about')
   return currentPageContext
 }

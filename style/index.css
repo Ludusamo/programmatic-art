@@ -81,6 +81,10 @@ Description {
   font-family: 'Roboto Mono', monospace;
 }
 
+SingleArtView {
+  display: flex;
+}
+
 ArtCollection {
   display: flex;
   flex-wrap: wrap;
@@ -165,6 +169,26 @@ Art:hover > span {
   opacity: 1;
 }
 
+ArtInfo {
+  margin: 1em;
+  flex-direction: row;
+}
+
+ArtInfo > * {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5em;
+}
+
+ArtDisplay {
+  display: flex;
+  justify-content: center
+}
+
+EleName {
+  font-size: 1.5em;
+}
+
 @keyframes shiftLeft {
   0%   { margin-left: 0.0rem; }
   25%  { margin-left: -0.1rem; }
@@ -180,6 +204,9 @@ Art:hover > span {
   html {
     font-size: 14px;
   }
+  ArtDisplay {
+    flex-direction: column;
+  }
 }
 
 @media all and (max-width:800px) {
@@ -188,6 +215,9 @@ Art:hover > span {
   }
   html {
     font-size: 16px;
+  }
+  ArtDisplay {
+    flex-direction: column;
   }
 }
 
@@ -218,4 +248,12 @@ Art:hover > span {
 .pagination a:hover:not(.active) {
   background-color: #FF7F2E;
   border-radius: 1em;
+}
+
+.chip {
+  display: inline-block;
+  background: hsl(0, 0%, 80%);
+  padding: 0.25em 0.6em;
+  border-radius: 1em;
+  font-size: 1em;
 }
