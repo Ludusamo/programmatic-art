@@ -204,12 +204,6 @@ EleName {
   html {
     font-size: 14px;
   }
-  ArtDisplay {
-    flex-direction: column;
-  }
-  Art {
-    margin: 0;
-  }
 }
 
 @media all and (max-width:800px) {
@@ -219,11 +213,18 @@ EleName {
   html {
     font-size: 16px;
   }
+  body {
+    margin: 0;
+  }
   ArtDisplay {
     flex-direction: column;
   }
   ArtDisplay > * {
     margin: 0;
+  }
+  SingleArtView {
+    justify-content: center;
+    align-content: center;
   }
 }
 
