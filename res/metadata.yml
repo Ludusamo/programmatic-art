@@ -80,4 +80,8 @@ art:
     date: 2021-01-23
     tags:
       - looping
+  ghosties:
+    title: "ghosties"
+    date: 2021-02-06
+    tags: []
 ...
