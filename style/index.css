@@ -207,6 +207,9 @@ EleName {
 }
 
 @media all and (max-width:800px) {
+  HeaderTitle {
+    margin-right: 0;
+  }
   Header {
     justify-content: space-around;
   }
