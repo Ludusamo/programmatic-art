@@ -12,7 +12,6 @@ export const art = (WIDTH, HEIGHT) => {
         this.curveHeight = HEIGHT / 50
         this.color = color
 
-
         this.eyeWidth = this.width / 4
         this.baseLeftEyePos = [this.x - this.width / 5, this.y - this.height / 6]
         this.baseRightEyePos = [this.x + this.width / 5, this.y - this.height / 6]

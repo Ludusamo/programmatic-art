@@ -92,7 +92,7 @@ export const art = (WIDTH, HEIGHT) => {
       for (let i = nodes.length - 1; i >= 0; i--) {
         let node = nodes[i]
         node.run()
-        if (node.isDead())  {
+        if (node.isDead()) {
           nodes.splice(i, 1)
         }
       }
