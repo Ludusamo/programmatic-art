@@ -88,4 +88,8 @@ art:
     title: "matrix rain"
     date: 2021-02-20
     tags: []
+  robot:
+    title: "robot"
+    date: 2021-03-07
+    tags: []
 ...
